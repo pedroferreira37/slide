@@ -21,7 +21,6 @@ export default class Slide {
 
   onStart(event) {
     let movetype;
-    console.log(event);
     if (event.type === 'mousedown') {
       event.preventDefault();
       this.dist.startX = event.clientX
@@ -60,10 +59,40 @@ export default class Slide {
     this.onEnd = this.onEnd.bind(this);
 
   }
+  slidePosition(slide) {
+    const margin = (this.wrapper.offsetWith - slide.offsetWith) / 2
+    return -(slide.offsetLeft - margin);
+  }
+  slideConfig() {
+    this.slideArray = [...this.slide.children].map((element) => {
+      const position = this.slidePosition(element);
+      return {
+        element,
+        position
+      }
+    });
+  }
+
+  slideIndex(index) {
+    const last = this.slideArray.length - 1
+    this.index = {
+      prev: index ? index - 1 : undefined,
+      active: index,
+      next: index === last ? undefined : index + 1,
+    }
+  }
+
+  changeSlide(index) {
+    const activeSlide = this.slideArray[index]
+    this.moveSlide(activeSlide.position);
+    this.slideIndex(index);
+    this.dist.finalPosition = activeSlide.position;
+  }
 
   init() {
     this.bindEvents();
     this.addSlideEvents();
+    this.slideConfig();
     return this;
   }
 }
