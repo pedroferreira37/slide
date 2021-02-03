@@ -22,7 +22,7 @@ img {
 }
 
 .slide:hover {
-  will-change: transform, border-bottom;
+  will-change: transform;
 }
 
 .slide li {
